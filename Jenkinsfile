@@ -15,8 +15,8 @@ pipeline {
 
         stage('Tests & Couverture') {
             steps {
+                // 'mvn test' exécute les tests ET génère automatiquement la couverture JaCoCo
                 bat 'mvn test'
-                bat 'mvn cobertura:cobertura'
             }
             post {
                 success {
@@ -40,7 +40,8 @@ pipeline {
 
     post {
         always {
-            step([$class: 'CoberturaPublisher', coberturaReportFile: 'target/site/cobertura/coverage.xml'])
+            // Remplacement de CoberturaPublisher par JacocoPublisher
+            jacoco()
         }
         failure {
             mail to: 'admin@esi.ac.ma',
